@@ -55,6 +55,12 @@ void initial(){
         in.close();
         in.open("transcationFile.dat" , ios::out | ios::binary);
         in.close();
+        in.open("ReportFinance.dat" , ios::out | ios::binary);
+        in.close();
+        in.open("action.dat" , ios::out | ios::binary);
+        in.close();
+        in.open("log.dat" , ios::out | ios::binary);
+        in.close();
         in.open("financeFile.dat" , ios::out | ios::binary);
         in.seekp(0);
         Finance tmp;
@@ -164,6 +170,13 @@ void run(const std::string& command){
             ++i;
             string t;
             for (; i < command.length() && command[i] != ' ' ; ++i) t += command[i];
+            fstream r;
+            r.open("log.dat" , ios::out | ios::binary);
+            r.seekp(0 , ios::end);
+            LOG tmp;
+            strcpy(tmp.username , users.top().username);
+            string x = "modify " + t;
+            strcpy(tmp.action , x.c_str());
             string type = t.substr(1 , t.find('=') - 1);
             if (type == "ISBN") {
                 string isbn = t.substr(6);
@@ -307,8 +320,28 @@ void run(const std::string& command){
         buy(isbn.c_str() , quantity);
         return;
     }
-    //else if (token == "report"){}//three type
-    //else if (token == "log"){}
+    else if (token == "report"){
+        if (users.empty()) throw "error";
+        string type;
+        ++i;
+        for (; i < command.length() && command[i] != ' '; ++i) type += command[i];
+        if (type == "finance"){
+            if (users.top().privilege != 7) throw "error";
+            reportFinance();
+        }
+        if (type == "employee"){
+            if (users.top().privilege != 7) throw "error";
+            reportEmployee();
+        }
+        if (type == "myself"){
+            if (users.top().privilege < 3) throw "error";
+            reportMyself(users.top().userid);
+        }
+    }//three type
+    else if (token == "log"){
+        if (users.empty() || users.top().privilege != 7) throw "error";
+        log();
+    }
     else if (token == "quit"){
         quit();
     }

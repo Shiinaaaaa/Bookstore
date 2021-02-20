@@ -23,6 +23,28 @@ public:
     Transcation();
 };
 
+class ReportFinance{
+public:
+    double money = 0;
+    char Do[200] = "";
+    ReportFinance();
+};
+
+class Action{
+public:
+    char action[200] = "";
+    char name[50] = "";
+    Action();
+};
+
+class LOG{
+public:
+    char action[200] = "";
+    char username[100] = "";
+    double money = -1;
+    LOG();
+};
+
 void showFinance();
 
 void showFinance_t(int time);
@@ -33,6 +55,6 @@ void reportEmployee();
 
 void log();
 
-void reportMyself();
+void reportMyself(char *_userid);
 
 #endif //BOOKSTORE_STORE_H

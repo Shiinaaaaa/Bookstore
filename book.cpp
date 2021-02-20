@@ -193,6 +193,25 @@ void import(int _quantity , double totalPrice){
     w.seekp(0 , ios::end);
     w.write(reinterpret_cast<char*>(&tmp3) , sizeof(Transcation));
     w.close();
+    fstream w2;
+    w2.open("ReportFinance.dat" , ios::in | ios::out | ios::binary);
+    w2.seekp(0 , ios::end);
+    ReportFinance o;
+    o.money = totalPrice;
+    string bookName = tmp.name;
+    string bookISBN = tmp.ISBN;
+    string a = "import " + bookISBN + " " + bookName + " - ";
+    strcpy(o.Do , a.c_str());
+    w2.write(reinterpret_cast<char*>(&o) , sizeof(ReportFinance));
+    w2.close();
+    w2.open("log.dat" , ios::in | ios::out | ios::binary);
+    w2.seekp(0 , ios::end);
+    LOG o2;
+    o2.money = totalPrice;
+    strcpy(o2.action , a.c_str());
+    strcpy(o2.username , users.top().username);
+    w2.write(reinterpret_cast<char*>(&o2) , sizeof(LOG));
+    w2.close();
 };
 
 void buy(const char _isbn[] , int _quantity){
@@ -225,6 +244,25 @@ void buy(const char _isbn[] , int _quantity){
     w.seekp(0 , ios::end);
     w.write(reinterpret_cast<char*>(&tmp3) , sizeof(Transcation));
     w.close();
+    fstream w2;
+    w2.open("ReportFinance.dat" , ios::in | ios::out | ios::binary);
+    w2.seekp(0 , ios::end);
+    ReportFinance o;
+    o.money = tmp2.benefit;
+    string bookName = tmp.name;
+    string bookISBN = tmp.ISBN;
+    string a = "buy " + bookISBN + " " + bookName + " + ";
+    strcpy(o.Do , a.c_str());
+    w2.write(reinterpret_cast<char*>(&o) , sizeof(ReportFinance));
+    w2.close();
+    w2.open("log.dat" , ios::in | ios::out | ios::binary);
+    w2.seekp(0 , ios::end);
+    LOG o2;
+    o2.money = tmp2.benefit;
+    strcpy(o2.action , a.c_str());
+    strcpy(o2.username , users.top().username);
+    w2.write(reinterpret_cast<char*>(&o2) , sizeof(LOG));
+    w2.close();
 }
 
 bool BOOK::operator<(const BOOK &o) {

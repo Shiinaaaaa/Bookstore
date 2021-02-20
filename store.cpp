@@ -3,12 +3,19 @@
 //
 
 #include "store.h"
+#include <cstring>
 
 using namespace std;
 
 Finance::Finance() = default;
 
 Transcation::Transcation() = default;
+
+ReportFinance::ReportFinance() = default;
+
+Action::Action() = default;
+
+LOG::LOG() = default;
 
 void showFinance(){
     fstream r;
@@ -54,11 +61,54 @@ void showFinance_t(int time){
     r.close();
 }
 
+void reportFinance(){
+    showFinance();
+    fstream r;
+    r.open("ReportFinance.dat" , ios::in | ios::out | ios::binary);
+    r.seekg(0);
+    while(!r.eof()){
+        ReportFinance tmp;
+        r.read(reinterpret_cast<char*>(&tmp) , sizeof(ReportFinance));
+        std::cout << tmp.Do << " " << tmp.money << endl;
+    }
+    r.close();
+};
 
-void reportFinance(){};
+void reportEmployee(){
+    fstream r;
+    r.open("action.dat" , ios::in | ios::out | ios::binary);
+    r.seekg(0);
+    while(!r.eof()){
+        Action tmp;
+        r.read(reinterpret_cast<char*>(&tmp) , sizeof(Action));
+        std::cout << tmp.name << "\t" << tmp.action << endl;
+    }
+    r.close();
+};
 
-void reportEmployee(){};
+void reportMyself(char *_userid){
+    fstream r;
+    r.open("action.dat" , ios::in | ios::out | ios::binary);
+    r.seekg(0);
+    while(!r.eof()){
+        Action tmp;
+        r.read(reinterpret_cast<char*>(&tmp) , sizeof(Action));
+        if (strcmp(_userid , tmp.name) == 0) {
+            std::cout << tmp.name << "\t" << tmp.action << endl;
+        }
+    }
+    r.close();
+};
 
-void log(){};
-
-void reportMyself(){};
+void log(){
+    fstream r;
+    r.open("log.dat" , ios::in | ios::out | ios::binary);
+    r.seekg(0);
+    while(!r.eof()){
+        LOG tmp;
+        r.read(reinterpret_cast<char*>(&tmp) , sizeof(LOG));
+        if (tmp.money == -1) std::cout << tmp.username << "\t" << tmp.action << endl;
+        else std::cout << tmp.username << "\t" << tmp.action << tmp.money << endl;
+    }
+    r.close();
+};
