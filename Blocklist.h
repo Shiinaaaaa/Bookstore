@@ -30,7 +30,6 @@ public:
 
 class Block{
 private:
-
     int count = 0;
 public:
     int previous = -1;

@@ -3,7 +3,7 @@ project(code)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(bookstore
+add_executable(code
         main.cpp
         Blocklist.h
         Blocklist.cpp
